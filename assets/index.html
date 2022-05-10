@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* body {background-color: powderblue;} */
+        /* h3   {color: green;} */
+        </style>
+</head>
+<body>
+    <h3>TEST Content</h3>
+    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id aut dolor veniam quo dignissimos esse atque vero quasi maxime! In consectetur beatae eveniet at quas voluptatem odio nisi itaque error.</p>
+
+    <input type="date" name="date" id="date" placeholder="DD/MM/YYYY">
+    <input type="text" name="text" id="text">
+
+    <h3 id="header" onclick="color('red')">TEST URL</h3>
+    <p>
+        <a href="tel:0781715054">Make phone call</a> 
+    </p>
+</body>
+<script>
+    function color(col){
+        document.getElementById("header").style.backgroundColor=col;
+    }
+</script>
+</html>
