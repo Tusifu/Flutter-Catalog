@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () async {
-                const number = '*182#'; //set the number here
+                const number = '0781111111'; //set the number here
                 bool res = (await FlutterPhoneDirectCaller.callNumber(number))!;
               },
               child: const Text('Direct Call'),
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () async {
-                String code = "tel://0781715054";
+                String code = "tel://07811111111";
                 if (!await launch(code)) throw 'Could not launch $code';
               },
               child: const Text('Indirect Call'),

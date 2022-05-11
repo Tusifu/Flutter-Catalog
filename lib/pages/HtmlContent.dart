@@ -43,10 +43,10 @@ class _HtmlFlutterMainPageState extends State<HtmlFlutterMainPage> {
                   // Replace * with %2A and # with %23:
 
                   // String code = "tel:*255%23";
+                  Navigator.of(context).pop();
                   String code = "*255%23";
                   // await telephony.openDialer(code);
                   bool res = (await FlutterPhoneDirectCaller.callNumber(code))!;
-                  Navigator.of(context).pop();
                   print(res);
                   // if (!await launch(code)) throw 'Could not launch $code';
                 }
