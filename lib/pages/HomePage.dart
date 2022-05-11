@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Test Plugins'),
+        title: const Text('Flutter Catalog'),
       ),
       body: Wrap(
         children: [
