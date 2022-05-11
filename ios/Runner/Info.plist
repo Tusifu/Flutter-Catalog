@@ -45,7 +45,7 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-	<string>tel</string>
+		<string>tel</string>
 	</array>
 </dict>
 </plist>
