@@ -12,46 +12,80 @@ class UrlView extends StatefulWidget {
 
 class _UrlViewState extends State<UrlView> {
   final telephony = Telephony.instance;
+
+  late String url;
+  bool isLoading = true;
+  final _key = UniqueKey();
+
+  UrlView(String title, String url) {
+    this.url = url;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('webview_flutter_plus Plugin'),
+        title: const Text('webview flutter plus'),
       ),
-      body: ListView(
+      body: Stack(
         children: [
           // Text("Height of WebviewPlus: $_height",
           //     style: const TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(
             height: MediaQuery.of(context).size.height,
             child: WebViewPlus(
+              key: _key,
               serverPort: 5353,
               javascriptChannels: null,
               initialUrl:
-                  'https://tickets.nokanda.app/nokandaService/institutions/SKDL2pgPj2YPGHVcgIlc/events',
+                  'http://192.168.0.198:8000/nokandaService/institutions/SKDL2pgPj2YPGHVcgIlc/events',
               // onWebViewCreated: (controller) {
               //   _controller = controller;
               // },
+
+              navigationDelegate: (NavigationRequest request) {
+                if (request.url.startsWith('https://checkoutwave.com')) {
+                  print('blocking navigation to $request}');
+                  setState(() {
+                    isLoading = false;
+                  });
+
+                  return NavigationDecision.prevent;
+                }
+                setState(() {
+                  isLoading = true;
+                });
+                return NavigationDecision.navigate;
+              },
               onPageFinished: (url) async {
                 print(url);
                 if (url.contains("tel")) {
                   print("contains tel");
                   print("url is" + url);
                   String launchThis = url.replaceAll("#", "%23");
-                  print("launch is " + launchThis);
+                  // print("launch is " + launchThis);
 
                   // Replace * with %2A and # with %23:
 
                   String code = "tel:*255%23";
 
-                  await telephony.openDialer("123413453");
+                  // await telephony.dialPhoneNumber("*182*2*1*1*1*100#");
 
-                  // if (!await launch(launchThis)) throw 'Could not launch $code';
+                  if (!await launch(launchThis)) throw 'Could not launch $code';
                 }
+                setState(() {
+                  isLoading = false;
+                });
               },
               javascriptMode: JavascriptMode.unrestricted,
             ),
           ),
+
+          isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Stack(),
         ],
       ),
     );

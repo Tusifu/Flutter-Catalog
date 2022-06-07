@@ -44,11 +44,11 @@ class _HtmlFlutterMainPageState extends State<HtmlFlutterMainPage> {
 
                   // String code = "tel:*255%23";
                   Navigator.of(context).pop();
-                  String code = "*255%23";
+                  // String code = "*182#";
+                  String code = "tel:*182#";
                   // await telephony.openDialer(code);
-                  bool res = (await FlutterPhoneDirectCaller.callNumber(code))!;
-                  print(res);
-                  // if (!await launch(code)) throw 'Could not launch $code';
+                  // bool res = (await FlutterPhoneDirectCaller.callNumber(code))!;
+                  if (!await launch(code)) throw 'Could not launch $code';
                 }
                 _controller?.getHeight().then((double height) {
                   setState(() {
