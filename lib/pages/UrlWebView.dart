@@ -82,10 +82,13 @@ class _UrlViewState extends State<UrlView> {
           ),
 
           isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
+              ? Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(child: CircularProgressIndicator()),
                 )
-              : Stack(),
+              : Container(),
         ],
       ),
     );
