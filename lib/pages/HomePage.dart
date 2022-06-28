@@ -83,6 +83,15 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Url WEB View'),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pushNamed('/mobileNumber');
+              },
+              child: const Text('Mobile Number'),
+            ),
+          ),
         ],
       ),
     );

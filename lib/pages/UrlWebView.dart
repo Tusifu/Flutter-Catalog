@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'package:telephony/telephony.dart';
+import 'dart:io' show Platform;
 
 class UrlView extends StatefulWidget {
   UrlView({Key? key}) : super(key: key);
@@ -11,15 +12,15 @@ class UrlView extends StatefulWidget {
 }
 
 class _UrlViewState extends State<UrlView> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final telephony = Telephony.instance;
 
-  late String url;
   bool isLoading = true;
   final _key = UniqueKey();
-
-  UrlView(String title, String url) {
-    this.url = url;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +39,35 @@ class _UrlViewState extends State<UrlView> {
               serverPort: 5353,
               javascriptChannels: null,
               initialUrl:
-                  'http://192.168.0.198:8000/nokandaService/institutions/SKDL2pgPj2YPGHVcgIlc/events',
+                  'http://192.168.0.198:8000/nokandaService/institutions/SKDL2pgPj2YPGHVcgIlc/events/0788862917',
               // onWebViewCreated: (controller) {
               //   _controller = controller;
               // },
 
-              navigationDelegate: (NavigationRequest request) {
-                if (request.url.startsWith('https://checkoutwave.com')) {
-                  print('blocking navigation to $request}');
+              navigationDelegate: (NavigationRequest request) async {
+                if (request.url
+                    .startsWith('https://checkout.flutterwave.com')) {
                   setState(() {
                     isLoading = false;
                   });
+                  print('here');
+                  return NavigationDecision.navigate;
+                }
+                if (request.url.startsWith('tel')) {
+                  print('show url ${request.url}');
+                  String url = request.url.split('tel:')[1];
+
+                  if (Platform.isAndroid) {
+                    await FlutterPhoneDirectCaller.callNumber(url);
+                  } else if (Platform.isIOS) {
+                    // on ios final # is considered as 23. so we remove last
+                    // two characters and replace with # and make a call
+
+                    String s = request.url.split('tel:')[1];
+                    String url = s.substring(0, s.length - 2) + "#";
+
+                    await FlutterPhoneDirectCaller.callNumber(url);
+                  }
 
                   return NavigationDecision.prevent;
                 }
@@ -58,10 +77,24 @@ class _UrlViewState extends State<UrlView> {
                 return NavigationDecision.navigate;
               },
               onPageFinished: (url) async {
+                // String code = url.split(":")[1];
+                // print(code);
+                // String codeToSend = Functions()
+                //     .computeCodeToSend(code, '0781715054', '0781715054');
+                // const platform = const MethodChannel('com.kene.for_tests');
+
+                // try {
+                //   var res = await platform.invokeMethod(
+                //       "moMoDialNumber", {"code": codeToSend, "motive": 1});
+                //   print(res);
+                // } on PlatformException catch (e) {
+                //   print("error check balance is $e");
+                // }
+
                 print(url);
                 if (url.contains("tel")) {
                   print("contains tel");
-                  print("url is" + url);
+                  print("url is " + url);
                   String launchThis = url.replaceAll("#", "%23");
                   // print("launch is " + launchThis);
 
@@ -69,9 +102,21 @@ class _UrlViewState extends State<UrlView> {
 
                   String code = "tel:*255%23";
 
+                  // TELEPHONY CALLER
                   // await telephony.dialPhoneNumber("*182*2*1*1*1*100#");
 
-                  if (!await launch(launchThis)) throw 'Could not launch $code';
+                  // if (Platform.isAndroid) {
+                  //   await FlutterPhoneDirectCaller.callNumber(url);
+
+                  //   Navigator.pop(context);
+                  // } else if (Platform.isIOS) {
+                  //   //URL LAUNCHER CALLER
+                  //   if (await canLaunch(url)) {
+                  //     await launch(url);
+                  //   } else {
+                  //     throw 'Could not launch $url';
+                  //   }
+                  // }
                 }
                 setState(() {
                   isLoading = false;
