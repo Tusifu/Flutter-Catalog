@@ -5,6 +5,7 @@ import 'package:for_tests/pages/HtmlContent.dart';
 import 'package:for_tests/pages/IncomingMessages.dart';
 import 'package:for_tests/pages/MessageReader.dart';
 import 'package:for_tests/pages/MobileNumber.dart';
+import 'package:for_tests/pages/Telephony.dart';
 import 'package:for_tests/pages/urlWebView.dart';
 
 void main() {
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/incomingMessage': (BuildContext context) => IncomingMessages(),
         '/urlwebview': (BuildContext context) => UrlView(),
         '/mobileNumber': (BuildContext context) => MobileNumberPackage(),
+        '/telephony': (BuildContext context) => TelephonyPage(),
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );

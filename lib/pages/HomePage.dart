@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () async {
                 Navigator.of(context).pushNamed('/messageReader');
               },
-              child: const Text('Message Reader'),
+              child: const Text('Telephony Reader'),
             ),
           ),
           Padding(
@@ -90,6 +90,15 @@ class _HomePageState extends State<HomePage> {
                 Navigator.of(context).pushNamed('/mobileNumber');
               },
               child: const Text('Mobile Number'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pushNamed('/telephony');
+              },
+              child: const Text('Telephony'),
             ),
           ),
         ],

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:telephony/telephony.dart';
 
+onBackgroundMessage(SmsMessage message) {
+  debugPrint(message.toString());
+}
+
 class TelephonyPage extends StatefulWidget {
   @override
   _TelephonyPageState createState() => _TelephonyPageState();
@@ -9,10 +13,6 @@ class TelephonyPage extends StatefulWidget {
 class _TelephonyPageState extends State<TelephonyPage> {
   String _message = "";
   final telephony = Telephony.instance;
-
-  onBackgroundMessage(SmsMessage message) {
-    debugPrint(message.toString());
-  }
 
   @override
   void initState() {
@@ -43,7 +43,9 @@ class _TelephonyPageState extends State<TelephonyPage> {
 
     if (result != null && result) {
       telephony.listenIncomingSms(
-          onNewMessage: onMessage, onBackgroundMessage: onBackgroundMessage);
+        onNewMessage: onMessage,
+        onBackgroundMessage: onBackgroundMessage,
+      );
     }
 
     if (!mounted) return;
@@ -58,12 +60,44 @@ class _TelephonyPageState extends State<TelephonyPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(child: Text("Latest received SMS: $_message")),
-          TextButton(
+          Center(
+            child: ElevatedButton(
               onPressed: () async {
-                await telephony.openDialer("123413453");
+                // Logger.root.level = Level.ALL;
+                // Logger.root.onRecord.listen((record) {
+                //   debugPrint(
+                //       '${record.level.name}: ${record.time}: ${record.message}');
+                // });
+                await telephony.sendSms(
+                  to: "0781715054",
+                  message: "TEST SENDING SMS!",
+                );
               },
-              child: Text('Open Dialer'))
+              child: const Text('Send SMS '),
+            ),
+          ),
+          // Center(child: Text("Latest received SMS: $_message")),
+          const SizedBox(
+            height: 5,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              List<SignalStrength> strenghts = await telephony.signalStrengths;
+              print(strenghts);
+            },
+            child: const Text(
+              'Measure Strength',
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await telephony.openDialer("123413453");
+            },
+            child: const Text('Open Dialer'),
+          ),
         ],
       ),
     );

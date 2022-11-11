@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:mobile_number/mobile_number.dart';
 import 'dart:async';
 
+import 'package:telephony/telephony.dart';
+
 class MobileNumberPackage extends StatefulWidget {
   MobileNumberPackage({Key? key}) : super(key: key);
 
@@ -13,6 +15,9 @@ class MobileNumberPackage extends StatefulWidget {
 class _MobileNumberPackageState extends State<MobileNumberPackage> {
   String _mobileNumber = '';
   List<SimCard> _simCard = <SimCard>[];
+  final telephony = Telephony.instance;
+  String _message = "";
+  String _address = "";
 
   @override
   void initState() {
@@ -24,6 +29,23 @@ class _MobileNumberPackageState extends State<MobileNumberPackage> {
     });
 
     initMobileNumberState();
+  }
+
+  Future<void> initPlatformState() async {
+    final bool? result = await telephony.requestPhoneAndSmsPermissions;
+
+    if (result != null && result) {
+      telephony.listenIncomingSms(
+        onNewMessage: onMessage,
+      );
+    }
+  }
+
+  onMessage(SmsMessage message) async {
+    setState(() {
+      _message = message.body ?? "Error reading message body.";
+      _address = message.address ?? '';
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -59,6 +81,10 @@ class _MobileNumberPackageState extends State<MobileNumberPackage> {
     return Column(children: widgets);
   }
 
+  String splitNumber(String? number) {
+    return number!.split("+25")[1];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +98,13 @@ class _MobileNumberPackageState extends State<MobileNumberPackage> {
               height: 10,
             ),
             Text('Running on: $_mobileNumber\n'),
-            fillCards()
+            fillCards(),
+            const SizedBox(height: 10),
+            // Text(
+            // "Firt Number:   ${_simCard[0].number!.split('+25')[1] ?? ''} \n Second number: ${_simCard[1].number!.split('+25')[1] ?? ''}"),
+            const SizedBox(height: 10),
+            // Text("the message is: $_message"),
+            Text("the message address is: $_address"),
           ],
         ),
       ),
