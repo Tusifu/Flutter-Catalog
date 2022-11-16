@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:for_tests/pages/DialPadPage.dart';
 import 'package:for_tests/pages/HomePage.dart';
@@ -7,8 +10,50 @@ import 'package:for_tests/pages/MessageReader.dart';
 import 'package:for_tests/pages/MobileNumber.dart';
 import 'package:for_tests/pages/Telephony.dart';
 import 'package:for_tests/pages/urlWebView.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
 
-void main() {
+taskFunction(data) {
+  // read shared
+  print('task to be executed $data');
+}
+
+const task = 'simpleTask';
+@pragma(
+    'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
+void callbackDispatcher() {
+  Workmanager().executeTask((taskName, inputData) {
+    if (taskName == 'simpleTask') {
+      taskFunction(inputData);
+    }
+    //simpleTask will be emitted here.
+    return Future.value(true);
+  });
+}
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  Workmanager().initialize(
+      callbackDispatcher, // The top level function, aka callbackDispatcher
+      isInDebugMode:
+          true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+      );
+  final prefs = await SharedPreferences.getInstance();
+  // await prefs.setString('token', 'thisistoken');
+
+  final String? token = prefs.getString('token');
+  // print('this token from prefs $token');
+  Workmanager().registerOneOffTask(
+    Random().toString(),
+    task,
+    initialDelay: const Duration(
+      seconds: 30,
+    ),
+    inputData: <String, dynamic>{
+      'shared_data': token,
+    },
+  );
   runApp(const MyApp());
 }
 
