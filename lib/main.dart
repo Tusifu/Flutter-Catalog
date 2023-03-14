@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:for_tests/pages/DialPadPage.dart';
+import 'package:for_tests/pages/HivePage.dart';
 import 'package:for_tests/pages/HomePage.dart';
 import 'package:for_tests/pages/HtmlContent.dart';
 import 'package:for_tests/pages/IncomingMessages.dart';
@@ -67,7 +68,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primaryColor: Colors.blue[900],
       ),
       routes: <String, WidgetBuilder>{
         '/dialPad': (BuildContext context) => DialPagePage(),
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
         '/urlwebview': (BuildContext context) => UrlView(),
         '/mobileNumber': (BuildContext context) => MobileNumberPackage(),
         '/telephony': (BuildContext context) => TelephonyPage(),
+        '/hive': (BuildContext context) => HivePage(),
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );

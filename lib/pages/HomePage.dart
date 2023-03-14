@@ -109,6 +109,15 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Telephony'),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pushNamed('/hive');
+              },
+              child: const Text('Hive'),
+            ),
+          ),
         ],
       ),
     );
